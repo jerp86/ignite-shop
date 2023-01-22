@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import { useKeenSlider } from 'keen-slider/react'
 import Stripe from 'stripe'
@@ -40,7 +40,7 @@ export default function Home({ products }: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const response = await stripe.products.list({
     expand: ['data.default_price'],
   })
@@ -56,9 +56,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
   })
 
+  const seconds = 60
+  const minutes = 60
+  const hours = 168
+
   return {
     props: {
       products,
     } as HomeProps,
+    revalidate: seconds * minutes * hours,
   }
 }
