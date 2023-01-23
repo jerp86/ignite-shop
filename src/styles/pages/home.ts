@@ -8,7 +8,7 @@ export const HomeContainer = styled('main', {
   minHeight: 656,
 })
 
-export const Product = styled('a', {
+export const Product = styled('div', {
   background: '$backgroundGradient',
   borderRadius: 8,
   position: 'relative',
