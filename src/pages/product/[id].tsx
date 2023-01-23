@@ -1,34 +1,79 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { GetStaticProps } from 'next'
+import Stripe from 'stripe'
+import { stripe } from '@/lib/stripe'
 import {
   ImageContainer,
   ProductContainer,
   ProductDetails,
 } from '@/styles/pages/product'
 
-export default function Product() {
+interface ProductProps {
+  product: {
+    id: string
+    name: string
+    imageUrl: string
+    price: string
+    description: string
+  }
+}
+
+export default function Product({ product }: ProductProps) {
   const { query } = useRouter()
   console.log(query)
 
   return (
     <ProductContainer>
       <ImageContainer>
-        <Image src="" alt="" />
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          width={520}
+          height={480}
+        />
       </ImageContainer>
 
       <ProductDetails>
-        <h1>Camiseta X</h1>
-        <span>R$ 79,90</span>
-
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit,
-          ratione nam odio ducimus id accusamus unde voluptatem sit perspiciatis
-          eos, ea sunt blanditiis molestias, nulla aperiam aspernatur fugiat
-          delectus maiores.
-        </p>
+        <h1>{product.name}</h1>
+        <span>{product.price}</span>
+        <p>{product.description}</p>
 
         <button>Comprar agora</button>
       </ProductDetails>
     </ProductContainer>
   )
+}
+
+export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
+  params,
+}) => {
+  const seconds = 60
+  const minutes = 60
+  const hours = 168
+  const revalidate = seconds * minutes * hours
+  const productId = params?.id || ''
+
+  const product = await stripe.products.retrieve(productId, {
+    expand: ['default_price'],
+  })
+
+  const price = product.default_price as Stripe.Price
+  const formattedPrice = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format((price.unit_amount ?? 0) / 100)
+
+  return {
+    props: {
+      product: {
+        id: product.id,
+        name: product.name,
+        imageUrl: product.images[0],
+        price: formattedPrice,
+        description: product.description,
+      },
+    } as ProductProps,
+    revalidate,
+  }
 }
