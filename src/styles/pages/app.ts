@@ -6,6 +6,16 @@ export const AppContainer = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'center',
   minHeight: '100vh',
+
+  '@md': {
+    paddingBottom: '2.4rem',
+    paddingLeft: '3.2rem',
+  },
+
+  '@sm': {
+    paddingBottom: '2.4rem',
+    paddingLeft: '2.4rem',
+  },
 })
 
 export const AppHeader = styled('header', {
@@ -13,4 +23,12 @@ export const AppHeader = styled('header', {
   width: '100%',
   maxWidth: 1180,
   margin: '0 auto',
+
+  '@md': {
+    padding: '2.4rem 0',
+  },
+
+  '@sm': {
+    padding: '1.6rem 0',
+  },
 })

@@ -32,4 +32,8 @@ export const {
       '2xl': '3.2rem',
     },
   },
+  media: {
+    sm: '(max-width: 480px)',
+    md: '(max-height: 900px)',
+  },
 })
