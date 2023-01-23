@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
 import {
@@ -43,6 +43,13 @@ export default function Product({ product }: ProductProps) {
       </ProductDetails>
     </ProductContainer>
   )
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [{ params: { id: 'prod_NDK13rdz1C3LcA' } }],
+    fallback: false,
+  }
 }
 
 export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
