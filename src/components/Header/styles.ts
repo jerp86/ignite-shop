@@ -6,6 +6,13 @@ export const HeaderContainer = styled('header', {
   maxWidth: 1180,
   margin: '0 auto',
 
+  display: 'flex',
+  alignItems: 'center',
+
+  button: {
+    marginLeft: 'auto',
+  },
+
   img: {
     aspectRatio: 2.5,
     objectFit: 'cover',
