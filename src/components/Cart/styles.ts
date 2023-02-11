@@ -39,3 +39,70 @@ export const CartClose = styled(Dialog.Close, {
   top: '2.8rem',
   right: '2.8rem',
 })
+
+export const CartProduct = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '2rem',
+})
+
+export const CartProductImage = styled('div', {
+  width: '10.194rem',
+  height: '9.3rem',
+  background: '$backgroundGradient',
+  borderRadius: 8,
+
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  img: {
+    aspectRatio: 1,
+    objectFit: 'cover',
+  },
+})
+
+export const CartProductDetails = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '0.8rem',
+
+  div: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '0.2rem',
+
+    alignSelf: 'stretch',
+
+    p: {
+      color: '$gray300',
+      fontSize: '$md',
+    },
+
+    strong: {
+      color: '$gray100',
+      fontSize: '$md',
+    },
+  },
+
+  button: {
+    background: 'none',
+    border: 'none',
+
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '1rem',
+
+    fontWeight: 700,
+    fontSize: '$sm',
+    color: '$green500',
+
+    '&:hover': {
+      color: '$green300',
+      transition: 'color 0.4s',
+    },
+  },
+})
