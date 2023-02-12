@@ -22,7 +22,7 @@ export const CartContent = styled(Dialog.Content, {
     marginBottom: '3.2rem',
   },
 
-  '> section': {
+  'h2 + section': {
     display: 'flex',
     flexDirection: 'column',
     gap: '2.4rem',
@@ -103,6 +103,57 @@ export const CartProductDetails = styled('div', {
     '&:hover': {
       color: '$green300',
       transition: 'color 0.4s',
+    },
+  },
+})
+
+export const FinalizationDetails = styled('section', {
+  display: 'flex',
+  flexDirection: 'column',
+  marginTop: 'auto',
+
+  div: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+    span: {
+      fontSize: '$sm',
+    },
+
+    p: {
+      color: '$gray300',
+      textAlign: 'right',
+    },
+
+    '&:nth-child(2)': {
+      fontWeight: 700,
+
+      span: {
+        fontSize: '$md',
+      },
+
+      p: {
+        color: '$gray100',
+        fontSize: '$xl',
+      },
+    },
+  },
+
+  button: {
+    width: '100%',
+    background: '$green500',
+    color: '$white',
+    border: 'none',
+    borderRadius: 8,
+    padding: '2rem 3.2rem',
+    marginTop: '5.5rem',
+
+    fontWeight: 700,
+    fontSize: '$md',
+
+    '&:not(:disabled):hover': {
+      backgroundColor: '$green300',
     },
   },
 })

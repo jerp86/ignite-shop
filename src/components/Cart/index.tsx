@@ -8,6 +8,7 @@ import {
   CartProduct,
   CartProductDetails,
   CartProductImage,
+  FinalizationDetails,
 } from './styles'
 
 const imageUrl =
@@ -30,21 +31,36 @@ export const Cart = () => (
         <section>
           {/* <p>Parece que seu carrinho está vazio :(</p> */}
 
-          <CartProduct>
-            <CartProductImage>
-              <Image width={95} height={95} alt="" src={imageUrl} />
-            </CartProductImage>
+          {[...Array(3)].map((item) => (
+            <CartProduct key={String(item)}>
+              <CartProductImage>
+                <Image width={95} height={95} alt="" src={imageUrl} />
+              </CartProductImage>
 
-            <CartProductDetails>
-              <div>
-                <p>Nome do Produto</p>
-                <strong>R$ 74,90</strong>
-              </div>
+              <CartProductDetails>
+                <div>
+                  <p>Nome do Produto</p>
+                  <strong>R$ 74,90</strong>
+                </div>
 
-              <button type="button">Remover</button>
-            </CartProductDetails>
-          </CartProduct>
+                <button type="button">Remover</button>
+              </CartProductDetails>
+            </CartProduct>
+          ))}
         </section>
+
+        <FinalizationDetails>
+          <div>
+            <span>Quantidade</span>
+            <p>3 itens</p>
+          </div>
+          <div>
+            <span>Valor total</span>
+            <p>R$ 224,70</p>
+          </div>
+
+          <button type="button">Finalizar compra</button>
+        </FinalizationDetails>
       </CartContent>
     </Dialog.Portal>
   </Dialog.Root>
