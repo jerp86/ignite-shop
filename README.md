@@ -1,7 +1,7 @@
-# Fundamentos do Next.js
+# Desafio 04 - Adicionando features ao Ignite Shop
 
 <p align="center" >
-  <img src="https://user-images.githubusercontent.com/54115624/214121250-057630d3-5368-43e6-95d4-5efba88ea824.png" alt="" width="600" />
+  <img src="https://user-images.githubusercontent.com/54115624/218580885-67a7ba7a-cee3-40ed-84a4-7ad5df82c504.png" alt="" width="600" />
 </>
 
 <p align="center">
@@ -38,74 +38,54 @@ Foi desenvolvida uma aplicação de e-commerce, que contém as seguintes funcion
 - Link para efetuar a compra através do Stripe
 - Página estática de sucesso da compra efetuada
 
+Nesse desafio, foi necessário implementar um carrinho no nosso projeto, com a opção de adicionar e remover os itens antes de prosseguir ao checkout.
+
 
 ## :interrobang: Motivo
 
-Reinicio dos estudos do bootcamp Ignite ReactJS da Rocketseat.
+Nesse desafio, aproveitei a aplicação já desenvolvida na trilha **Ignite ReactJS** para implementar um carrinho que utilizará os dados da API do Stripe para buscar os itens existentes, e controlará, através da aplicação, o número de itens que a pessoa deseja comprar.
 
-Este projeto foi dividido em quatro partes:
-- Estrutura do Next.js
-  - Conceitos no Next.js
-  - Criação do projeto
-  - Criação das rotas
-  - Configuração do documento HTML
+- [x] Adicionar a possibilidade de adicionar aquele item ao carrinho na página do produto
+- [x] Salvar todos os itens selecionados, e exibir o número de itens no carrinho
+- [x] Enviar o carrinho que armazenado na aplicação para a rota de checkout, onde irá gerar a sessão de checkout com os ``line_items`` necessários.
 
-- Estrutura visual
-  - Configuração do Stitches
-  - Preparando estilos globais e cabeçalho da aplicação
-  - Estruturando a Home utilizando o componente de Imagems do Next.js
-  - Criando o carrossel
-
-- Integração com Stripe
-  - Configurando conta no Stripe
-  - Data Fetching no Next.js
-  - Buscando produtos do Stripe
-  - Utilizando SSG
-  - Formatando preço com Intl
-
-- Produto & Checkout
-  - Utilizando navegação via Link do Next.js
-  - Estrutura das páginas de Produto e de Sucesso
-  - Carregando informações do produto
-  - SSG com parâmetros dinâmicos
-  - Fallback do SSG
-  - Prefetch de links
-  - API routes no Next.js
-  - Checkout no Stripe
-  - Redirect no SSR
-  - Trabalhando com SEO
+Para completar esse desafio foi necessário de realizar algumas pesquisas na documentaçao para entender sobre a API do Stripe.
 
 ## :rocket: Tecnologias Utilizadas
 
 - [Next.js](https://nextjs.org/)
 - [Axios](https://axios-http.com/)
-- [ESLint](https://eslint.org/)
-- [keen-slider](https://keen-slider.io/)
+- [embla-carousel-react](https://www.embla-carousel.com/)
+- [immer](https://github.com/immerjs/immer#readme)
+- [Phosphor](https://phosphoricons.com/)
+- [Radix-UI](https://www.radix-ui.com/)
 - [Stitches](https://stitches.dev/)
 - [Stripe](https://stripe.com/)
+- [use-context-selector](https://github.com/dai-shi/use-context-selector#readme)
 - [@rocketseat/eslint-config](https://github.com/rocketseat/eslint-config-rocketseat#readme)
 
 ## :art: Layout no Figma
 
 Para essa aplicação foi fornecido um layout para que fosse possível seguir e implementar todas as funcionalidades desenhadas no #Figma.
 
-[Figma - Ignite Shop](https://www.figma.com/file/OIJJEW24DFiJO6XLqHw2DM/Ignite-Shop/duplicate?node-id=0%3A1)
+[Figma - Ignite Shop](https://www.figma.com/file/FxlDRKOmznBbTH8DsTgnZU/Ignite-Shop-2.0/duplicate)
 
 ## :rainbow: Documentação de cores
 
-| Cor                  | Hexadecimal                                       |
-| -------------------- | ------------------------------------------------- |
-| white                | #FFFFFF                                           |
-|                                                                          |
-| gray-100             | #E1E1E6                                           |
-| gray-300             | #C4C4CC                                           |
-| gray-800             | #202024                                           |
-| gray-900             | #121214                                           |
-|                                                                          |
-| green-300            | #00B37E                                           |
-| green-500            | #00875F                                           |
-|                                                                          |
-| backgroundGradient   | linear-gradient(180deg, #1EA483 0%, #7465D4 100%) |
+| Cor                | Hexadecimal                                       |
+| ------------------ | ------------------------------------------------- |
+| white              | #FFFFFF                                           |
+|                                                                        |
+| gray-100           | #E1E1E6                                           |
+| gray-300           | #C4C4CC                                           |
+| gray-500           | #8D8D99                                           |
+| gray-800           | #202024                                           |
+| gray-900           | #121214                                           |
+|                                                                        |
+| green-300          | #00B37E                                           |
+| green-500          | #00875F                                           |
+|                                                                        |
+| backgroundGradient | linear-gradient(180deg, #1EA483 0%, #7465D4 100%) |
 
 ## :abc: Fontes utilizadas
 
@@ -115,12 +95,12 @@ Para essa aplicação foi fornecido um layout para que fosse possível seguir e 
 
 - Clone o projeto:
 ```
-git clone https://github.com/jerp86/04-ignite-shop.git
+git clone https://github.com/jerp86/ignite-shop.git
 ```
 
 - Acesse a pasta clonada:
 ```
-cd 04-ignite-shop
+cd ignite-shop
 ```
 
 - Instale as dependências:
