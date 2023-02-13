@@ -1,6 +1,9 @@
+import { useCart } from '@/hooks/useCart'
+import { formattedPrice } from '@/util/formattedPrice'
 import * as Dialog from '@radix-ui/react-dialog'
 import Image from 'next/image'
 import { X } from 'phosphor-react'
+import { useCallback } from 'react'
 import { CartButton } from '../CartButton'
 import {
   CartClose,
@@ -11,57 +14,69 @@ import {
   FinalizationDetails,
 } from './styles'
 
-const imageUrl =
-  'https://files.stripe.com/links/MDB8YWNjdF8xTVN0NkRJbDhOTlBiRzEzfGZsX3Rlc3RfZ1pPVVAzVTlibHJtbE5UMnFISkNYRjZq00VPsj3Nzp'
+export const Cart = () => {
+  const { cartItems, cartTotal, removeCartItem } = useCart()
+  const cartQuantity = cartItems.length
+  const quantityText = `${cartQuantity} ${cartQuantity <= 1 ? 'item' : 'itens'}`
 
-export const Cart = () => (
-  <Dialog.Root>
-    <Dialog.Trigger asChild>
-      <CartButton />
-    </Dialog.Trigger>
+  const handleRemove = useCallback(
+    (id: string) => removeCartItem(id),
+    [removeCartItem],
+  )
 
-    <Dialog.Portal>
-      <CartContent>
-        <CartClose>
-          <X size={24} weight="bold" />
-        </CartClose>
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <CartButton />
+      </Dialog.Trigger>
 
-        <h2>Sacola de compras</h2>
+      <Dialog.Portal>
+        <CartContent>
+          <CartClose>
+            <X size={24} weight="bold" />
+          </CartClose>
 
-        <section>
-          {/* <p>Parece que seu carrinho está vazio :(</p> */}
+          <h2>Sacola de compras</h2>
 
-          {[...Array(3)].map((item) => (
-            <CartProduct key={String(item)}>
-              <CartProductImage>
-                <Image width={95} height={95} alt="" src={imageUrl} />
-              </CartProductImage>
+          <section>
+            {!cartQuantity ? (
+              <p>Parece que seu carrinho está vazio :(</p>
+            ) : (
+              cartItems.map((item) => (
+                <CartProduct key={item.id}>
+                  <CartProductImage>
+                    <Image width={95} height={95} alt="" src={item.imageUrl} />
+                  </CartProductImage>
 
-              <CartProductDetails>
-                <div>
-                  <p>Nome do Produto</p>
-                  <strong>R$ 74,90</strong>
-                </div>
+                  <CartProductDetails>
+                    <div>
+                      <p>{item.name}</p>
+                      <strong>{item.price}</strong>
+                    </div>
 
-                <button type="button">Remover</button>
-              </CartProductDetails>
-            </CartProduct>
-          ))}
-        </section>
+                    <button type="button" onClick={() => handleRemove(item.id)}>
+                      Remover
+                    </button>
+                  </CartProductDetails>
+                </CartProduct>
+              ))
+            )}
+          </section>
 
-        <FinalizationDetails>
-          <div>
-            <span>Quantidade</span>
-            <p>3 itens</p>
-          </div>
-          <div>
-            <span>Valor total</span>
-            <p>R$ 224,70</p>
-          </div>
+          <FinalizationDetails>
+            <div>
+              <span>Quantidade</span>
+              <p>{quantityText}</p>
+            </div>
+            <div>
+              <span>Valor total</span>
+              <p>{formattedPrice.format(cartTotal)}</p>
+            </div>
 
-          <button type="button">Finalizar compra</button>
-        </FinalizationDetails>
-      </CartContent>
-    </Dialog.Portal>
-  </Dialog.Root>
-)
+            <button type="button">Finalizar compra</button>
+          </FinalizationDetails>
+        </CartContent>
+      </Dialog.Portal>
+    </Dialog.Root>
+  )
+}
