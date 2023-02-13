@@ -5,15 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Stripe from 'stripe'
 import { Footer } from '@/components/Footer'
+import { ProductProps } from '@/context/CartContext'
 import { stripe } from '@/lib/stripe'
 import { HomeContainer, Product, SliderContainer } from '@/styles/pages/home'
-
-interface ProductProps {
-  id: string
-  name: string
-  imageUrl: string
-  price: string
-}
+import { formattedPrice } from '@/util/formattedPrice'
 
 interface HomeProps {
   products: ProductProps[]
@@ -68,20 +63,22 @@ export const getStaticProps: GetStaticProps = async () => {
     expand: ['data.default_price'],
   })
 
-  const products: ProductProps[] = response.data.map((product) => {
-    const price = product.default_price as Stripe.Price
-    const formattedPrice = new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format((price.unit_amount ?? 0) / 100)
+  const products: Omit<ProductProps, 'description'>[] = response.data.map(
+    (product) => {
+      const price = product.default_price as Stripe.Price
+      const hasUnitAmount = price.unit_amount ?? 0
+      const hasFormattedPrice = formattedPrice.format(hasUnitAmount / 100)
 
-    return {
-      id: product.id,
-      name: product.name,
-      imageUrl: product.images[0],
-      price: formattedPrice,
-    }
-  })
+      return {
+        id: product.id,
+        name: product.name,
+        imageUrl: product.images[0],
+        price: hasFormattedPrice,
+        numberPrice: hasUnitAmount / 100,
+        defaultPriceId: price.id,
+      }
+    },
+  )
 
   const seconds = 60
   const minutes = 60
