@@ -57,7 +57,7 @@ export const ProductDetails = styled('div', {
     padding: '2rem',
     fontWeight: 'bold',
 
-    '&:hover': {
+    '&:not(:disabled):hover': {
       backgroundColor: '$green300',
       transition: 'background-color 0.4s',
     },

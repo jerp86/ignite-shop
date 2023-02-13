@@ -14,7 +14,7 @@ export const CartButtonContainer = styled('button', {
         backgroundColor: '$gray800',
         color: '$gray500',
 
-        '&:hover': {
+        '&:not(:disabled):hover': {
           opacity: 0.4,
           transition: 'all 0.4s',
         },
@@ -23,7 +23,7 @@ export const CartButtonContainer = styled('button', {
         backgroundColor: '$green500',
         color: '$white',
 
-        '&:hover': {
+        '&:not(:disabled):hover': {
           backgroundColor: '$green300',
           transition: 'background-color 0.4s',
         },
