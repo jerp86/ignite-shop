@@ -9,17 +9,30 @@ import { ProductProps } from '@/context/CartContext'
 import { stripe } from '@/lib/stripe'
 import { HomeContainer, Product, SliderContainer } from '@/styles/pages/home'
 import { formattedPrice } from '@/util/formattedPrice'
+import { useCart } from '@/hooks/useCart'
+import { MouseEvent, useCallback } from 'react'
+import { CartButton } from '@/components/CartButton'
 
 interface HomeProps {
   products: ProductProps[]
 }
 
 export default function Home({ products }: HomeProps) {
+  const { addToCart, checkIfItemAlreadyExists } = useCart()
+
   const [emblaRef] = useEmblaCarousel({
     align: 'start',
     skipSnaps: false,
     dragFree: true,
   })
+
+  const handleAddToCart = useCallback(
+    (event: MouseEvent<HTMLButtonElement>, product: ProductProps) => {
+      event.preventDefault()
+      addToCart(product)
+    },
+    [addToCart],
+  )
 
   return (
     <>
@@ -46,7 +59,15 @@ export default function Home({ products }: HomeProps) {
                       height={480}
                     />
 
-                    <Footer name={prod.name} price={prod.price} />
+                    <Footer name={prod.name} price={prod.price}>
+                      <CartButton
+                        color="green"
+                        size="large"
+                        type="button"
+                        disabled={checkIfItemAlreadyExists(prod.id)}
+                        onClick={(evt) => handleAddToCart(evt, prod)}
+                      />
+                    </Footer>
                   </Product>
                 </Link>
               ))}
