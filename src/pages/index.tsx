@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
 import { HomeContainer, Product } from '@/styles/pages/home'
+import { Footer } from '@/components/Footer'
 
 interface ProductProps {
   id: string
@@ -43,10 +44,7 @@ export default function Home({ products }: HomeProps) {
                 height={480}
               />
 
-              <footer>
-                <strong>{prod.name}</strong>
-                <span>{prod.price}</span>
-              </footer>
+              <Footer name={prod.name} price={prod.price} />
             </Product>
           </Link>
         ))}
