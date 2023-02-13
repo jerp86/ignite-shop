@@ -8,13 +8,51 @@ export const CartButtonContainer = styled('button', {
   borderRadius: 6,
   position: 'relative',
 
-  backgroundColor: '$gray800',
-  color: '$gray500',
+  variants: {
+    color: {
+      gray: {
+        backgroundColor: '$gray800',
+        color: '$gray500',
 
-  width: '4.8rem',
-  height: '4.8rem',
+        '&:hover': {
+          opacity: 0.4,
+          transition: 'all 0.4s',
+        },
+      },
+      green: {
+        backgroundColor: '$green500',
+        color: '$white',
 
-  svg: {
-    fontSize: '2.4rem',
+        '&:hover': {
+          backgroundColor: '$green300',
+          transition: 'background-color 0.4s',
+        },
+      },
+    },
+
+    size: {
+      medium: {
+        width: '4.8rem',
+        height: '4.8rem',
+
+        svg: {
+          fontSize: '2.4rem',
+        },
+      },
+
+      large: {
+        width: '5.6rem',
+        height: '5.6rem',
+
+        svg: {
+          fontSize: '3.2rem',
+        },
+      },
+    },
+  },
+
+  defaultVariants: {
+    color: 'gray',
+    size: 'medium',
   },
 })
