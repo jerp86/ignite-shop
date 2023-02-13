@@ -1,8 +1,6 @@
-import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useState } from 'react'
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
 import {
@@ -12,46 +10,23 @@ import {
 } from '@/styles/pages/product'
 import Head from 'next/head'
 import { useCart } from '@/hooks/useCart'
+import { ProductProps } from '@/context/CartContext'
+import { formattedPrice } from '@/util/formattedPrice'
+import { timerToRevalidate } from '@/util/timerToRevalidate'
 
-interface ProductProps {
-  product: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-    description: string
-    defaultPriceId: string
-  }
+interface IProduct {
+  product: ProductProps
 }
 
-export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false)
+export default function Product({ product }: IProduct) {
   const { isFallback } = useRouter()
-  const { checkIfItemAlreadyExists } = useCart()
+  const { addToCart, checkIfItemAlreadyExists } = useCart()
 
   if (isFallback) {
     return <p>Loading...</p>
   }
 
-  const handleBuyProduct = async () => {
-    try {
-      setIsCreatingCheckoutSession(true)
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data
-      window.location.href = checkoutUrl
-    } catch (error) {
-      // Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
-      setIsCreatingCheckoutSession(false)
-      alert('Falha ao redirecionar ao checkout!')
-    }
-  }
-
   const itemAlreadyInCart = checkIfItemAlreadyExists(product.id)
-  const isDisabled = itemAlreadyInCart || isCreatingCheckoutSession
   const buttonText = itemAlreadyInCart
     ? 'Produto já está no carrinho'
     : 'Colocar na sacola'
@@ -79,8 +54,8 @@ export default function Product({ product }: ProductProps) {
 
           <button
             type="button"
-            onClick={handleBuyProduct}
-            disabled={isDisabled}
+            onClick={() => addToCart(product)}
+            disabled={itemAlreadyInCart}
           >
             {buttonText}
           </button>
@@ -100,10 +75,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
   params,
 }) => {
-  const seconds = 60
-  const minutes = 60
-  const hours = 168
-  const revalidate = seconds * minutes * hours
   const productId = params?.id || ''
 
   const product = await stripe.products.retrieve(productId, {
@@ -111,10 +82,8 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
   })
 
   const price = product.default_price as Stripe.Price
-  const formattedPrice = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format((price.unit_amount ?? 0) / 100)
+  const unitAmount = (price.unit_amount ?? 0) / 100
+  const hasFormattedPrice = formattedPrice.format(unitAmount)
 
   return {
     props: {
@@ -122,11 +91,12 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         id: product.id,
         name: product.name,
         imageUrl: product.images[0],
-        price: formattedPrice,
+        price: hasFormattedPrice,
         description: product.description,
         defaultPriceId: price.id,
+        numberPrice: unitAmount,
       },
-    } as ProductProps,
-    revalidate,
+    } as IProduct,
+    revalidate: timerToRevalidate({}),
   }
 }
