@@ -1,18 +1,19 @@
-import { CartButton } from '../CartButton'
+import { ReactNode } from 'react'
 import { FooterContainer } from './styles'
 
 interface FooterProps {
   name: string
   price: string
+  children?: ReactNode
 }
 
-export const Footer = ({ name, price }: FooterProps) => (
+export const Footer = ({ name, price, children }: FooterProps) => (
   <FooterContainer>
     <div>
       <strong>{name}</strong>
       <span>{price}</span>
     </div>
 
-    <CartButton color="green" size="large" type="button" />
+    {children}
   </FooterContainer>
 )
