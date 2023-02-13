@@ -17,7 +17,7 @@ interface CartContextData {
   cartTotal: number
   addToCart: (product: ProductProps) => void
   removeCartItem: (productId: string) => void
-  checkIfItemAlreadyExists: (productId: string) => void
+  checkIfItemAlreadyExists: (productId: string) => boolean
 }
 
 interface CartContextProviderProps {
