@@ -11,6 +11,7 @@ import {
   ProductDetails,
 } from '@/styles/pages/product'
 import Head from 'next/head'
+import { useCart } from '@/hooks/useCart'
 
 interface ProductProps {
   product: {
@@ -27,6 +28,7 @@ export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false)
   const { isFallback } = useRouter()
+  const { checkIfItemAlreadyExists } = useCart()
 
   if (isFallback) {
     return <p>Loading...</p>
@@ -47,6 +49,12 @@ export default function Product({ product }: ProductProps) {
       alert('Falha ao redirecionar ao checkout!')
     }
   }
+
+  const itemAlreadyInCart = checkIfItemAlreadyExists(product.id)
+  const isDisabled = itemAlreadyInCart || isCreatingCheckoutSession
+  const buttonText = itemAlreadyInCart
+    ? 'Produto já está no carrinho'
+    : 'Colocar na sacola'
 
   return (
     <>
@@ -70,10 +78,11 @@ export default function Product({ product }: ProductProps) {
           <p>{product.description}</p>
 
           <button
+            type="button"
             onClick={handleBuyProduct}
-            disabled={isCreatingCheckoutSession}
+            disabled={isDisabled}
           >
-            Comprar agora
+            {buttonText}
           </button>
         </ProductDetails>
       </ProductContainer>
