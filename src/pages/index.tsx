@@ -12,6 +12,7 @@ import { formattedPrice } from '@/util/formattedPrice'
 import { useCart } from '@/hooks/useCart'
 import { MouseEvent, useCallback } from 'react'
 import { CartButton } from '@/components/CartButton'
+import { timerToRevalidate } from '@/util/timerToRevalidate'
 
 interface HomeProps {
   products: ProductProps[]
@@ -87,28 +88,24 @@ export const getStaticProps: GetStaticProps = async () => {
   const products: Omit<ProductProps, 'description'>[] = response.data.map(
     (product) => {
       const price = product.default_price as Stripe.Price
-      const hasUnitAmount = price.unit_amount ?? 0
-      const hasFormattedPrice = formattedPrice.format(hasUnitAmount / 100)
+      const unitAmount = (price.unit_amount ?? 0) / 100
+      const hasFormattedPrice = formattedPrice.format(unitAmount)
 
       return {
         id: product.id,
         name: product.name,
         imageUrl: product.images[0],
         price: hasFormattedPrice,
-        numberPrice: hasUnitAmount / 100,
+        numberPrice: unitAmount,
         defaultPriceId: price.id,
       }
     },
   )
 
-  const seconds = 60
-  const minutes = 60
-  const hours = 168
-
   return {
     props: {
       products,
     } as HomeProps,
-    revalidate: seconds * minutes * hours,
+    revalidate: timerToRevalidate({}),
   }
 }
