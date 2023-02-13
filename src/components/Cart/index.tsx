@@ -1,9 +1,10 @@
 import { useCart } from '@/hooks/useCart'
 import { formattedPrice } from '@/util/formattedPrice'
 import * as Dialog from '@radix-ui/react-dialog'
+import axios from 'axios'
 import Image from 'next/image'
 import { X } from 'phosphor-react'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { CartButton } from '../CartButton'
 import {
   CartClose,
@@ -15,14 +16,39 @@ import {
 } from './styles'
 
 export const Cart = () => {
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false)
+
   const { cartItems, cartTotal, removeCartItem } = useCart()
   const cartQuantity = cartItems.length
   const quantityText = `${cartQuantity} ${cartQuantity <= 1 ? 'item' : 'itens'}`
+  const isDisabled = !cartQuantity || isCreatingCheckoutSession
+  const optionButtonText = !cartQuantity
+    ? 'Nenhum item no carrinho'
+    : 'Aguarde...'
+  const buttonCheckoutText = isDisabled ? optionButtonText : 'Finalizar compra'
 
   const handleRemove = useCallback(
     (id: string) => removeCartItem(id),
     [removeCartItem],
   )
+
+  const handleCheckout = async () => {
+    try {
+      setIsCreatingCheckoutSession(true)
+
+      const response = await axios.post('/api/checkout', {
+        products: cartItems,
+      })
+
+      const { checkoutUrl } = response.data
+      window.location.href = checkoutUrl
+    } catch (error) {
+      // Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
+      setIsCreatingCheckoutSession(false)
+      alert('Falha ao redirecionar ao checkout!')
+    }
+  }
 
   return (
     <Dialog.Root>
@@ -73,7 +99,13 @@ export const Cart = () => {
               <p>{formattedPrice.format(cartTotal)}</p>
             </div>
 
-            <button type="button">Finalizar compra</button>
+            <button
+              type="button"
+              disabled={isDisabled}
+              onClick={handleCheckout}
+            >
+              {buttonCheckoutText}
+            </button>
           </FinalizationDetails>
         </CartContent>
       </Dialog.Portal>
